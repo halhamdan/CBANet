@@ -34,14 +34,19 @@ def evaluate_aggregated(
             )
             print(f"  {INV_MAP[c]}: F2 = {f2_c:.4f}")
 
-    auc_macro    = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='macro')
-    auc_weighted = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='weighted')
-    print(f"\nROC-AUC (OvR) Macro:    {auc_macro:.4f}")
-    print(f"ROC-AUC (OvR) Weighted: {auc_weighted:.4f}")
+    try:
+        auc_macro    = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='macro')
+        auc_weighted = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='weighted')
+        print(f"\nROC-AUC (OvR) Macro:    {auc_macro:.4f}")
+        print(f"ROC-AUC (OvR) Weighted: {auc_weighted:.4f}")
 
-    for c in range(N_CLASSES):
-        auc_c = roc_auc_score((y_test == c).astype(int), y_pred_probs[:, c])
-        print(f"  {INV_MAP[c]}: AUC = {auc_c:.4f}")
+        for c in range(N_CLASSES):
+            if np.sum(y_test == c) > 0:
+                auc_c = roc_auc_score((y_test == c).astype(int), y_pred_probs[:, c])
+                print(f"  {INV_MAP[c]}: AUC = {auc_c:.4f}")
+    except ValueError as e:
+        auc_macro = auc_weighted = float('nan')
+        print(f"\nROC-AUC: could not compute — {e}")
 
     return {
         'f2_weighted': f2_weighted,

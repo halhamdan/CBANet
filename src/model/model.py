@@ -1,30 +1,20 @@
 from __future__ import annotations
-import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers, Model, regularizers
 
 from src.config import N_CLASSES
 
 
-def sparse_categorical_focal_loss_enhanced(alpha_weights=None):
-    """Class-weighted cross-entropy loss (gamma=0 per ablation Table IV in the paper)."""
-    if alpha_weights is None:
-        alpha_weights = np.ones(N_CLASSES, dtype=np.float32)
-    alpha = tf.constant(alpha_weights, dtype=tf.float32)
+def sparse_categorical_focal_loss_enhanced():
+    """Standard cross-entropy loss (gamma=0 per ablation Table IV). Class imbalance is
+    handled solely via class_weight in model.fit(), not by alpha weighting in the loss."""
 
     def loss_fn(y_true, y_pred):
-        y_true    = tf.cast(tf.reshape(y_true, [-1]), tf.int32)   # ensure shape [batch]
-        y_pred    = tf.clip_by_value(y_pred, 1e-7, 1.0 - 1e-7)
-        y_true_oh = tf.one_hot(y_true, depth=N_CLASSES)
-
-        # gamma=0 reduces focal loss to weighted cross-entropy
-        class_gamma = tf.constant([0.0, 0.0, 0.0, 0.0], dtype=tf.float32)
-        gamma_t = tf.reduce_sum(y_true_oh * class_gamma, axis=-1)
-        a_t     = tf.reduce_sum(y_true_oh * alpha, axis=-1)
-
+        y_true = tf.cast(tf.reshape(y_true, [-1]), tf.int32)   # ensure shape [batch]
+        y_pred = tf.clip_by_value(y_pred, 1e-7, 1.0 - 1e-7)
         idx = tf.stack([tf.range(tf.shape(y_true)[0]), y_true], axis=1)
         p_t = tf.gather_nd(y_pred, idx)
-        return tf.reduce_mean(a_t * tf.pow(1.0 - p_t, gamma_t) * (-tf.math.log(p_t)))
+        return tf.reduce_mean(-tf.math.log(p_t))
 
     return loss_fn
 

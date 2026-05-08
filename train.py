@@ -117,18 +117,13 @@ def main() -> None:
     model = build_enhanced_model((pp['window_size'], len(final_features)))
     model.summary()
 
-    alpha_weights = np.array(
-        [class_weight_dict[i] for i in range(N_CLASSES)], dtype=np.float32
-    )
-    alpha_weights /= alpha_weights.sum()
-
     opt_cfg = tr['optimizer']
     model.compile(
         optimizer=tf.keras.optimizers.AdamW(
             learning_rate=opt_cfg['learning_rate'],
             weight_decay=opt_cfg['weight_decay'],
         ),
-        loss=sparse_categorical_focal_loss_enhanced(alpha_weights=alpha_weights),
+        loss=sparse_categorical_focal_loss_enhanced(),
         metrics=['accuracy'],
     )
 

@@ -51,6 +51,7 @@ def evaluate_by_driver(
         f1_macro    = f1_score(yt, yp, average='macro',    zero_division=0)
         f1_weighted = f1_score(yt, yp, average='weighted', zero_division=0)
         f2_weighted = fbeta_score(yt, yp, beta=2, average='weighted', zero_division=0)
+        f2_macro    = fbeta_score(yt, yp, beta=2, average='macro',    zero_division=0)
 
         per_cls_f1 = f1_score(yt, yp, average=None, zero_division=0, labels=range(N_CLASSES))
 
@@ -66,6 +67,7 @@ def evaluate_by_driver(
             'f1_macro':     round(f1_macro, 4),
             'f1_weighted':  round(f1_weighted, 4),
             'f2_weighted':  round(f2_weighted, 4),
+            'f2_macro':     round(f2_macro, 4),
             'auc_macro':    round(auc, 4),
         }
         for i, col in enumerate(_COL):
