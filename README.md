@@ -1,10 +1,10 @@
 # CBANet: A Compact Attention-Based CNN–BiLSTM Network for Aggressive Driving Event Detection
 
-Official implementation of **CBANet**, accepted at **IJCNN 2026**.
+Official implementation of **CBANet**, accepted at **[IJCNN 2026](https://2026.ijcnn.org/)**.
 
-> **Paper:** [CBANet: A Compact Attention-Based CNN–BiLSTM Network for Aggressive Driving Event Detection](https://durham-repository.worktribe.com/output/5289947)  
+> **Paper:** CBANet: A Compact Attention-Based CNN–BiLSTM Network for Aggressive Driving Event Detection  
 > **Authors:** Hanadi Alhamdan · Ghadah Alosaimi · Amir Atapour-Abarghouei · Farshad Arvin  
-> **Affiliations:** Durham University, UK · Princess Nourah bint Abdulrahman University, Saudi Arabia · Imam Mohammad Ibn Saud Islamic University, Saudi Arabia
+> **Affiliations:** [Durham University](https://www.durham.ac.uk/), UK · Princess Nourah bint Abdulrahman University, Saudi Arabia · Imam Mohammad Ibn Saud Islamic University, Saudi Arabia
 
 ---
 
@@ -25,13 +25,7 @@ CBANet classifies continuous vehicle telemetry into four driving behaviour categ
 | 2 | Harsh Braking |
 | 3 | Harsh Turning |
 
-**Architecture:** raw sensor windows → Conv1D feature extraction → Bidirectional LSTM temporal modelling → Attention weighting → Dense classifier.
-
-The pipeline combines:
-- 25 physics-inspired features engineered from 7 raw OBD/IMU signals
-- Harsh-priority sliding-window labelling with rule-based physics override
-- SMOTE oversampling (minority classes → 80% of majority) + class-weighted loss
-- Per-class decision threshold calibration at inference time
+The pipeline combines 25 physics-inspired features engineered from 7 raw OBD/IMU signals, harsh-priority sliding-window labelling, SMOTE oversampling with class-weighted loss, and per-class decision threshold calibration at inference time.
 
 ---
 
@@ -70,12 +64,6 @@ cd CBANet
 pip install -r requirements.txt
 ```
 
-Verify your environment:
-
-```bash
-python -c "import tensorflow as tf; print(tf.__version__); print(tf.config.list_physical_devices('GPU'))"
-```
-
 ---
 
 ## Data Format
@@ -103,54 +91,29 @@ Data is expected at **25 Hz** sampling rate. Labels are pre-assigned using the d
 python train.py
 ```
 
-Override any hyperparameter from the command line without editing files:
+Override any hyperparameter from the command line:
 
 ```bash
 python train.py --data "./mydata/*.csv" --epochs 200 --batch-size 32 --seed 0
 ```
 
-The pipeline:
-1. Loads all CSVs from `./LABELED/` and tags each row with session and driver IDs
-2. Engineers 25 physics-based features from the 7 raw signals
-3. Creates 100-sample sliding windows (4 s, 75% overlap) per session with harsh-priority labelling
-4. Applies SMOTE oversampling on the training split
-5. Trains CBANet up to 300 epochs with early stopping (patience=15) and ReduceLROnPlateau (patience=6)
-6. Optimises per-class decision thresholds on the validation set
-7. Reports metrics at three granularities: aggregated, by session, and by driver
-8. Saves the model, scaler, and thresholds to `./saved_models/`; plots to `./plots/`; CSV reports to `./results/`
-
-**Key hyperparameters** (edit `config.yaml`, or override via CLI flags above):
+**Key hyperparameters** (edit `config.yaml`):
 
 | Parameter | Value | Description |
 |-----------|-------|-------------|
-| `WINDOW_SIZE` | 100 | Samples per window (4 s @ 25 Hz) |
-| `STEP` | 25 | Stride (75% overlap) |
-| `DATA_PATH` | `./LABELED/*.csv` | Input data glob pattern |
+| `window_size` | 100 | Samples per window (4 s @ 25 Hz) |
+| `step` | 25 | Stride (75% overlap) |
 | Batch size | 64 | Mini-batch size |
 | Optimizer | AdamW | lr=5e-4, weight_decay=1e-4 |
 | Loss | Class-weighted CE (γ=0) | Best per ablation study (Table IV) |
+
+Outputs are saved to `./saved_models/` (model + scaler + thresholds), `./plots/` (figures), and `./results/` (per-session and per-driver CSV reports).
 
 ---
 
 ## Model Architecture
 
 ![CBANet Architecture](figures/architecture.png)
-
-```
-Input: (batch, 100 timesteps, 25 features)
-  │
-  ├─ Conv1D(64 filters, k=5) → BatchNorm → MaxPool(2) → Dropout(0.2)
-  ├─ Conv1D(128 filters, k=3) → BatchNorm → MaxPool(2) → Dropout(0.3)
-  │
-  ├─ BiLSTM(64, return_sequences=True, recurrent_dropout=0.2)
-  │
-  ├─ Temporal Attention (Dense tanh → softmax over time)
-  │
-  ├─ BiLSTM(32)
-  ├─ Dense(64, relu) → BatchNorm → Dropout(0.4)
-  ├─ Dense(32, relu) → Dropout(0.3)
-  └─ Dense(4, softmax)
-```
 
 ---
 
