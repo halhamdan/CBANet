@@ -10,11 +10,11 @@ Official implementation of **CBANet**, accepted at **[IJCNN 2026](https://2026.i
 
 > **Paper:** CBANet: A Compact Attention-Based CNN–BiLSTM Network for Aggressive Driving Event Detection  
 > **Authors:** Hanadi Alhamdan · Ghadah Alosaimi · Amir Atapour-Abarghouei · Farshad Arvin  
-> **Affiliations:** [Durham University](https://www.durham.ac.uk/), UK · Princess Nourah bint Abdulrahman University, Saudi Arabia · Imam Mohammad Ibn Saud Islamic University, Saudi Arabia
+> **Affiliations:** [Durham University](https://www.durham.ac.uk/), UK · [Princess Nourah bint Abdulrahman University](https://pnu.edu.sa/en/pages/home.aspx), Saudi Arabia · [Imam Mohammad Ibn Saud Islamic University](https://imamu.edu.sa/en/Pages/default.aspx), Saudi Arabia
 
 ---
 
-## Abstract
+## Abstract 
 
 Aggressive driving is a major cause of traffic accidents and poses a serious threat to road safety. Although deep learning methods have shown promising results in detecting risky driving behaviours from vehicle sensor data, their performance in real-world conditions is often limited by severe data imbalance, large variability between drivers, and the lack of physically interpretable vehicle dynamics representations. In this paper, we propose an enhanced deep learning framework for aggressive driving detection using multivariate vehicle dynamics signals. Instead of relying solely on raw measurements, the proposed approach constructs engineered dynamic features that capture steering, acceleration, and braking behaviour. To address the extreme rarity of aggressive events in naturalistic driving data, we introduce a stable training strategy that combines controlled SMOTE-based oversampling with a class-weighted loss formulation, and evaluates focal loss variants for imbalance handling. Furthermore, a safety-oriented decision strategy based on class-specific threshold calibration is adopted to better reflect the asymmetric risks of missed detections and false alarms in real-world applications. The proposed framework is evaluated on a newly collected naturalistic driving dataset. Extensive experiments show that the proposed method consistently outperforms standard deep learning baselines with significant improvements in minority-class recall and safety-critical F-score metrics while maintaining practical computational efficiency.
 
