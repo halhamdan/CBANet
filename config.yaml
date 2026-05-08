@@ -1,0 +1,35 @@
+data:
+  path: "./LABELED/*.csv"
+
+preprocessing:
+  window_size: 100          # ~4 seconds @ 25 Hz
+  step: 25                  # 75% overlap
+  harsh_fraction: 0.10
+  enable_physics_override: true
+  smote:
+    target_ratio_to_majority: 0.80
+    k_neighbors: 2
+
+training:
+  epochs: 300
+  batch_size: 64
+  random_seed: 42
+  test_size: 0.20
+  val_size: 0.20
+  optimizer:
+    learning_rate: 5.0e-4
+    weight_decay: 1.0e-4
+  early_stopping:
+    patience: 15
+    min_delta: 1.0e-4
+  reduce_lr:
+    factor: 0.5
+    patience: 6
+    min_lr: 1.0e-7
+    min_delta: 1.0e-4
+
+output:
+  plots_dir: "./plots"
+  models_dir: "./saved_models"
+  results_dir: "./results"
+  model_name: "CBANet"
