@@ -74,7 +74,7 @@ pip install -r requirements.txt
 
 ## Data Format
 
-Place your pre-labeled CSV files under `./LABELED/`. Each file must contain:
+Place your pre-labeled CSV files under `./LABELED/`. Each file represents one recording session. The column names below must appear **exactly as written** in the CSV header:
 
 | Column | Units |
 |--------|-------|
@@ -87,7 +87,9 @@ Place your pre-labeled CSV files under `./LABELED/`. Each file must contain:
 | `Gradient (%)` | % |
 | `Label` | `Normal` / `Harsh Acceleration` / `Harsh Braking` / `Harsh Turning` |
 
-Data is expected at **25 Hz** sampling rate. Labels are pre-assigned using the deterministic threshold-based pipeline described in Section IV-B of the paper (θ_brake = −0.35g, θ_accel = 0.38g, θ_turn = 0.55g).
+Data is expected at **25 Hz** sampling rate. Labels must be pre-assigned before running the pipeline; the labelling thresholds used in this work are described in Section IV-B of the paper (θ_brake = −0.35g, θ_accel = 0.38g, θ_turn = 0.55g).
+
+**File naming:** the filename stem is used to identify sessions and drivers in the evaluation reports. Use the convention `DriverID_SessionID.csv` (e.g., `Driver1_Session2.csv`) so that per-driver metrics are grouped correctly.
 
 ---
 

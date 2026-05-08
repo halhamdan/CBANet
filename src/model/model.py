@@ -13,7 +13,7 @@ def sparse_categorical_focal_loss_enhanced(alpha_weights=None):
     alpha = tf.constant(alpha_weights, dtype=tf.float32)
 
     def loss_fn(y_true, y_pred):
-        y_true    = tf.cast(y_true, tf.int32)
+        y_true    = tf.cast(tf.reshape(y_true, [-1]), tf.int32)   # ensure shape [batch]
         y_pred    = tf.clip_by_value(y_pred, 1e-7, 1.0 - 1e-7)
         y_true_oh = tf.one_hot(y_true, depth=N_CLASSES)
 

@@ -57,9 +57,7 @@ def evaluate_by_session(
 
         # AUC only if every class has at least one true sample
         try:
-            auc = roc_auc_score(
-                np.eye(N_CLASSES)[yt], prob, multi_class='ovr', average='macro'
-            )
+            auc = roc_auc_score(yt, prob, multi_class='ovr', average='macro')
         except ValueError:
             auc = float('nan')
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 import numpy as np
 from sklearn.metrics import classification_report, fbeta_score, roc_auc_score
-import tensorflow as tf
 
 from src.config import N_CLASSES, INV_MAP
 
@@ -35,9 +34,8 @@ def evaluate_aggregated(
             )
             print(f"  {INV_MAP[c]}: F2 = {f2_c:.4f}")
 
-    y_test_1hot  = tf.keras.utils.to_categorical(y_test, num_classes=N_CLASSES)
-    auc_macro    = roc_auc_score(y_test_1hot, y_pred_probs, multi_class='ovr', average='macro')
-    auc_weighted = roc_auc_score(y_test_1hot, y_pred_probs, multi_class='ovr', average='weighted')
+    auc_macro    = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='macro')
+    auc_weighted = roc_auc_score(y_test, y_pred_probs, multi_class='ovr', average='weighted')
     print(f"\nROC-AUC (OvR) Macro:    {auc_macro:.4f}")
     print(f"ROC-AUC (OvR) Weighted: {auc_weighted:.4f}")
 

@@ -55,9 +55,7 @@ def evaluate_by_driver(
         per_cls_f1 = f1_score(yt, yp, average=None, zero_division=0, labels=range(N_CLASSES))
 
         try:
-            auc = roc_auc_score(
-                np.eye(N_CLASSES)[yt], prob, multi_class='ovr', average='macro'
-            )
+            auc = roc_auc_score(yt, prob, multi_class='ovr', average='macro')
         except ValueError:
             auc = float('nan')
 
