@@ -1,6 +1,7 @@
 # CBANet: A Compact Attention-Based CNN–BiLSTM Network for Aggressive Driving Event Detection
 
-[![IJCNN 2026](https://img.shields.io/badge/IJCNN-2026-blue)](https://2026.ijcnn.org/)
+[![Durham](https://img.shields.io/badge/UK-Durham-blueviolet)](https://durham-repository.worktribe.com/output/5289947)
+[![WCCI | IJCNN 2026](https://img.shields.io/badge/IJCNN-2026-00629B?style=flat-square&logo=ieee)](https://attend.ieee.org/wcci-2026/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776ab)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.11+-FF6F00?logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
